@@ -14,6 +14,7 @@ gem 'carrierwave'
 gem 'fog'
 gem 'figaro', '~> 1.0.0' 
 gem 'mini_magick'
+gem 'devise'
 
 group :development, :test do
   gem 'byebug'
