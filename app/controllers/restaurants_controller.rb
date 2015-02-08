@@ -1,5 +1,7 @@
 class RestaurantsController < ApplicationController
   before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user, except: [:show, :index]
+  before_action :check_user, except: [:show, :index]
 
   # GET /restaurants
   # GET /restaurants.json
@@ -62,7 +64,7 @@ class RestaurantsController < ApplicationController
   def destroy
     @restaurant.destroy
     respond_to do |format|
-      format.html { redirect_to restaurants_url, notice: 'Restaurant was successfully destroyed.' }
+      format.html { redirect_to restaurants_url, notice: 'Restaurant was successfully deleted.' }
       format.json { head :no_content }
     end
   end
@@ -71,6 +73,12 @@ class RestaurantsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_restaurant
       @restaurant = Restaurant.find(params[:id])
+    end
+
+    def check_user
+      unless current_user.admin?
+        redirect_to root_url, alert: "Sorry, you don't have admin status!"
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
